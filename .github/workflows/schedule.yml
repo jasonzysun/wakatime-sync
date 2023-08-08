@@ -2,13 +2,21 @@ name: Update gist with WakaTime summary
 on:
   schedule:
     - cron: '40 1 * * *'
+  
+  # allows to manually run the job at any time
+  workflow_dispatch:
+  
+  # run on every push on the master branch
+  push:
+    branches:
+    - master
 jobs:
   update-gist:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
       - name: Update gist
-        uses: superman66/wakatime-sync@master
+        uses: jasonzysun/wakatime-sync@master
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           GIST_ID: ${{ secrets.GIST_ID}}
