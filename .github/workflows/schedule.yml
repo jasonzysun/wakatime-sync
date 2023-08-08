@@ -13,6 +13,8 @@ on:
 jobs:
   update-gist:
     runs-on: ubuntu-latest
+    # Specify the environment name to use
+    environment: name-of-your-environment
     steps:
       - uses: actions/checkout@master
       - name: Update gist
