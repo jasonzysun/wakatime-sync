@@ -1,7 +1,7 @@
 name: Update gist with WakaTime summary
 on:
   schedule:
-    - cron: '40 1 * * *'
+    - cron: '40 16 * * *'
   
   # allows to manually run the job at any time
   workflow_dispatch:
