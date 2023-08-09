@@ -59,7 +59,7 @@ async function updateGist(date, content) {
       gist_id: GIST_ID,
       files: {
         [`summaries_${date}.json`]: {
-          content: JSON.stringify(data)
+          content: JSON.stringify([data])
         }
       }
     })

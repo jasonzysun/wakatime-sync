@@ -568,7 +568,7 @@ module.exports = (function(e, t) {
       try {
         await y.gists.update({
           gist_id: c,
-          files: { [`summaries_${e}.json`]: { content: JSON.stringify(i) } }
+          files: { [`summaries_${e}.json`]: { content: JSON.stringify([i]) } }
         })
       } catch (e) {
         console.error(`Unable to update gist \n ${e}`)
