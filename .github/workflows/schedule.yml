@@ -14,7 +14,7 @@ jobs:
   update-gist:
     runs-on: ubuntu-latest
     # Specify the environment name to use
-    environment: name-of-your-environment
+    environment: wakatime
     steps:
       - uses: actions/checkout@master
       - name: Update gist
