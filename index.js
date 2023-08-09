@@ -53,12 +53,13 @@ function getMySummary(date) {
  */
 async function updateGist(date, content) {
   const file = ''
+  const { dependencies, ...data } = content[0]
   try {
     await octokit.gists.update({
       gist_id: GIST_ID,
       files: {
         [`summaries_${date}.json`]: {
-          content: JSON.stringify(content)
+          content: JSON.stringify(data)
         }
       }
     })
