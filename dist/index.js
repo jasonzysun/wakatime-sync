@@ -534,39 +534,18 @@ module.exports = (function(e, t) {
     const s = r(629)
     const { Octokit: o } = r(0)
     const a = r(53)
-    const { WAKATIME_API_KEY: u, GH_TOKEN: p, GIST_ID: c, SCU_KEY: d } = process.env
-    const l = 'https://wakatime.com/api/v1'
-    const m = `${l}/users/current/summaries`
-    const g = `https://sc.ftqq.com`
-    const h = new n(u)
-    const y = new o({ auth: `token ${p}` })
-    function getItemContent(e, t) {
-      let r = `#### ${e} \n`
-      t.forEach(e => {
-        r += `* ${e.name}: ${e.text} \n`
-      })
-      return r
-    }
-    function getMessageContent(e, t) {
-      if (t.length > 0) {
-        const { projects: e, grand_total: r, languages: n, categories: i, editors: s } = t[0]
-        return `## Wakatime Daily Report\nTotal: ${r.text}\n${getItemContent(
-          'Projects',
-          e
-        )}\n${getItemContent('Languages', n)}\n${getItemContent('Editors', s)}\n${getItemContent(
-          'Categories',
-          i
-        )}\n`
-      }
-    }
+    const { WAKATIME_API_KEY: u, GH_TOKEN: p, GIST_ID: c } = process.env
+    const d = 'https://wakatime.com/api/v1'
+    const l = `${d}/users/current/summaries`
+    const m = new o({ auth: `token ${p}` })
     function getMySummary(e) {
-      return a.get(m, { params: { start: e, end: e, api_key: u } }).then(e => e.data)
+      return a.get(l, { params: { start: e, end: e, api_key: u } }).then(e => e.data)
     }
     async function updateGist(e, t) {
       const r = ''
       const { dependencies: n, ...i } = t[0]
       try {
-        await y.gists.update({
+        await m.gists.update({
           gist_id: c,
           files: { [`summaries_${e}.json`]: { content: JSON.stringify([i]) } }
         })
@@ -574,30 +553,25 @@ module.exports = (function(e, t) {
         console.error(`Unable to update gist \n ${e}`)
       }
     }
-    async function sendMessageToWechat(e, t) {
-      if (typeof d !== 'undefined') {
-        return a.get(`${g}/${d}.send`, { params: { text: e, desp: t } }).then(e => e.data)
-      }
-    }
-    const f = async e => {
+    const g = async e => {
       const t = s()
         .subtract(1, 'day')
         .format('YYYY-MM-DD')
       try {
         const r = await getMySummary(t)
         await updateGist(t, r.data)
-        await sendMessageToWechat(`${t} update successfully!`, getMessageContent(t, r.data))
+        console.log(`${t} update successfully!`)
       } catch (r) {
         if (e === 1) {
           console.error(`Unable to fetch wakatime summary\n ${r} `)
-          return await sendMessageToWechat(`[${t}]failed to update wakatime data!`)
+          console.log(`[${t}]failed to update wakatime data!`)
         }
         console.log(`retry fetch summary data: ${e - 1} time`)
-        f(e - 1)
+        g(e - 1)
       }
     }
     async function main() {
-      f(3)
+      g(3)
     }
     main()
   },
@@ -1720,10 +1694,10 @@ module.exports = (function(e, t) {
       ')?)?'
     var C = u++
     a[C] = '^' + a[T] + '\\s*' + a[S] + '$'
-    var x = u++
-    a[x] = '^' + a[T] + '\\s*' + a[O] + '$'
     var P = u++
-    a[P] =
+    a[P] = '^' + a[T] + '\\s*' + a[O] + '$'
+    var x = u++
+    a[x] =
       '(?:^|[^\\d])' +
       '(\\d{1,' +
       s +
@@ -2439,7 +2413,7 @@ module.exports = (function(e, t) {
     }
     function replaceXRange(e, t) {
       e = e.trim()
-      var n = t.loose ? o[x] : o[C]
+      var n = t.loose ? o[P] : o[C]
       return e.replace(n, function(t, n, i, s, o, a) {
         r('xRange', e, t, n, i, s, o, a)
         var u = isX(i)
@@ -2730,7 +2704,7 @@ module.exports = (function(e, t) {
       if (typeof e !== 'string') {
         return null
       }
-      var t = e.match(o[P])
+      var t = e.match(o[x])
       if (t == null) {
         return null
       }
@@ -5807,13 +5781,13 @@ module.exports = (function(e, t) {
         if (q) {
           delete v.Authorization
         }
-        var x = y.test(j)
-        var P = x ? e.httpsAgent : e.httpAgent
+        var P = y.test(j)
+        var x = P ? e.httpsAgent : e.httpAgent
         var R = {
           path: o(k.path, e.params, e.paramsSerializer).replace(/^\?/, ''),
           method: e.method.toUpperCase(),
           headers: v,
-          agent: P,
+          agent: x,
           agents: { http: e.httpAgent, https: e.httpsAgent },
           auth: q
         }
@@ -5862,7 +5836,7 @@ module.exports = (function(e, t) {
           setProxy(R, A, j + '//' + k.hostname + (k.port ? ':' + k.port : '') + R.path)
         }
         var F
-        var B = x && (A ? y.test(A.protocol) : true)
+        var B = P && (A ? y.test(A.protocol) : true)
         if (e.transport) {
           F = e.transport
         } else if (e.maxRedirects === 0) {
@@ -14379,8 +14353,8 @@ module.exports = (function(e, t) {
       S = f.splice
     var O = getNative(y, 'Map'),
       C = getNative(Object, 'create')
-    var x = j ? j.prototype : undefined,
-      P = x ? x.toString : undefined
+    var P = j ? j.prototype : undefined,
+      x = P ? P.toString : undefined
     function Hash(e) {
       var t = -1,
         r = e ? e.length : 0
@@ -14527,7 +14501,7 @@ module.exports = (function(e, t) {
         return e
       }
       if (isSymbol(e)) {
-        return P ? P.call(e) : ''
+        return x ? x.call(e) : ''
       }
       var t = e + ''
       return t == '0' && 1 / e == -n ? '-0' : t
@@ -14841,8 +14815,8 @@ module.exports = (function(e, t) {
     )
     var O = b.Symbol,
       C = _.splice
-    var x = getNative(b, 'Map'),
-      P = getNative(Object, 'create')
+    var P = getNative(b, 'Map'),
+      x = getNative(Object, 'create')
     var R = O ? O.prototype : undefined,
       A = R ? R.toString : undefined
     function Hash(e) {
@@ -14855,14 +14829,14 @@ module.exports = (function(e, t) {
       }
     }
     function hashClear() {
-      this.__data__ = P ? P(null) : {}
+      this.__data__ = x ? x(null) : {}
     }
     function hashDelete(e) {
       return this.has(e) && delete this.__data__[e]
     }
     function hashGet(e) {
       var t = this.__data__
-      if (P) {
+      if (x) {
         var n = t[e]
         return n === r ? undefined : n
       }
@@ -14870,11 +14844,11 @@ module.exports = (function(e, t) {
     }
     function hashHas(e) {
       var t = this.__data__
-      return P ? t[e] !== undefined : k.call(t, e)
+      return x ? t[e] !== undefined : k.call(t, e)
     }
     function hashSet(e, t) {
       var n = this.__data__
-      n[e] = P && t === undefined ? r : t
+      n[e] = x && t === undefined ? r : t
       return this
     }
     Hash.prototype.clear = hashClear
@@ -14941,7 +14915,7 @@ module.exports = (function(e, t) {
       }
     }
     function mapCacheClear() {
-      this.__data__ = { hash: new Hash(), map: new (x || ListCache)(), string: new Hash() }
+      this.__data__ = { hash: new Hash(), map: new (P || ListCache)(), string: new Hash() }
     }
     function mapCacheDelete(e) {
       return getMapData(this, e)['delete'](e)

@@ -1,15 +1,15 @@
 name: Update gist with WakaTime summary
 on:
   schedule:
-    - cron: '40 16 * * *'
-  
+    - cron: '40 0 * * *'
+
   # allows to manually run the job at any time
   workflow_dispatch:
-  
+
   # run on every push on the master branch
   push:
     branches:
-    - master
+      - master
 jobs:
   update-gist:
     runs-on: ubuntu-latest
